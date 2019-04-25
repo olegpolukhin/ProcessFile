@@ -1,1 +1,2 @@
-synclogs.txt
+# ignore all txt
+*.txt
