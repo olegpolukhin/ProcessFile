@@ -1,6 +1,6 @@
 # Система сбора данных и выгрузка в таблицу
 
-Данные собираются из уже загруженных в базу данных access_log. Процесс включает в себя экспорт данных в новую базу данных, на основе которых и создается финальный отчет.    
+Данные собираются из уже загруженных в базу данных access_log. Процесс включает в себя экспорт данных в новую базу данных, на основе которых и создается финальный отчет.
 
 ## Системные требования
 
@@ -9,8 +9,8 @@
 ## Конфигурация `settings.py`
 ```python
 CLICKHOUSE = {
-    'port': '9000',
     'host': 'localhost',
+	'port': '9000',
     'db_export': '',
     'bin': ''
 }
@@ -46,22 +46,6 @@ CREATE TABLE {host}.{BASE_TABLE} (
         num_views AggregateFunction(count)) 
         ENGINE = AggregatingMergeTree(date, (date, type_id, tube_id, country, item_id), 8192)
 ```
-
-## Код Distributed таблицы
-
-Distributed таблица `geo_stats` на ноде шарда:
-
-```
-CREATE TABLE hostedtube.geo_stats ( 
-        date Date,
-        type_id UInt16,
-    	item_id UInt32,
-        tube_id UInt32,
-        country String,
-        num_views AggregateFunction(count)) 
-ENGINE = Distributed(logs, 'hostedtube', 'geo_stats_local', rand())
-```
-Сводная таблица `BASE_TABLE`
 
 ## Запуск скрипта
 
